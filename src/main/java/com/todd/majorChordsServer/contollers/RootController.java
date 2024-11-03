@@ -1,4 +1,4 @@
-package com.todd.majorChordsServer;
+package com.todd.majorChordsServer.contollers;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -17,6 +17,9 @@ public class RootController {
     @Value("${server.version}")
     private String versionString;
 
+    @Value("${server.env.message}")
+    private String envMessage;
+
     @GetMapping
     public ResponseEntity<Map<String, Object>> getRootPath(){
         Map<String, Object> map = new HashMap<>();
@@ -28,7 +31,7 @@ public class RootController {
     public ResponseEntity<Map<String, Object>> getVersion(){
         Map<String, Object> map = new HashMap<>();
         map.put("version", versionString);
+        map.put("message", envMessage);
         return new ResponseEntity<>(map, HttpStatus.OK);
     }
-
 }
