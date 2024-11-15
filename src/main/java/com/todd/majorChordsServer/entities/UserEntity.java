@@ -9,11 +9,14 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Document(collection = "users")
 @Data
@@ -27,7 +30,8 @@ public class UserEntity implements UserDetails {
     private String username;
     private String name;
     private String guitarLevel;
-    private String role;
+
+    private Set<RolesEnum> roles;
 
     @CreatedDate
     private LocalDateTime createdAt;
@@ -36,7 +40,9 @@ public class UserEntity implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+        return roles.stream().map(
+                (role) -> new SimpleGrantedAuthority("ROLE_" + role.name())
+        ).collect(Collectors.toSet());
     }
 
 }

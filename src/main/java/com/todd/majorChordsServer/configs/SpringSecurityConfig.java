@@ -1,5 +1,6 @@
 package com.todd.majorChordsServer.configs;
 
+import com.todd.majorChordsServer.entities.RolesEnum;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,6 +22,7 @@ public class SpringSecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeHttpRequests( (auth) -> auth
                         .requestMatchers( "/auth/**").permitAll()
+                        .requestMatchers("/admin/**").hasRole(RolesEnum.ADMIN.name())
                         .anyRequest().authenticated())
                 .csrf(csrf -> csrf.disable())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
