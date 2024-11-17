@@ -12,6 +12,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import java.util.List;
+
 @EnableWebSecurity
 @Configuration
 @RequiredArgsConstructor
@@ -21,8 +23,11 @@ public class SpringSecurityConfig {
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+        String[] publicEndpoints = new String[]{
+                "/swagger-ui/**", "/v", "/v3/api-docs/**"
+        };
         httpSecurity.authorizeHttpRequests( (auth) -> auth
-                        .requestMatchers("/", "/v").permitAll()
+                        .requestMatchers(publicEndpoints).permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/songs/**").hasRole(RolesEnum.ADMIN.name())
                         .requestMatchers("/songs/**").permitAll()
                         .requestMatchers( "/auth/**").permitAll()
