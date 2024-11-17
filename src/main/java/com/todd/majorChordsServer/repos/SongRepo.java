@@ -11,5 +11,6 @@ public interface SongRepo extends MongoRepository<SongEntity, String> {
 
     List<SongEntity> findByArtistsContaining(String artist);
     List<SongEntity> findByTitleContainingIgnoreCase(String title);
+    List<SongEntity> findByTitleContainingIgnoreCaseOrArtistsContainingIgnoreCase(String title, String artist);
 
 }
