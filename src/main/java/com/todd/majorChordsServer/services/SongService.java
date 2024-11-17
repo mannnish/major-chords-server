@@ -5,6 +5,7 @@ import com.todd.majorChordsServer.entities.SongEntity;
 import com.todd.majorChordsServer.repos.SongRepo;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -41,4 +42,14 @@ public class SongService {
     public void deleteSong(String id) {
         repo.deleteById(id);
     }
+
+    public List<SongDTO> searchSong(String query) {
+        List<SongEntity> matchingSongs = repo.findByTitleContainingIgnoreCaseOrArtistsContainingIgnoreCase(query, query);
+
+        // Convert entities to DTOs
+        return matchingSongs.stream()
+                .map(song -> modelMapper.map(song, SongDTO.class))
+                .toList();
+    }
 }
+
